@@ -1,0 +1,16 @@
+{
+  "name": "solar-system",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.2",
+    "vite": "^2.5.4"
+  },
+  "dependencies": {
+    "babylonjs": "^5.0.0-alpha.44"
+  }
+}
