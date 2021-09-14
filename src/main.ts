@@ -17,7 +17,7 @@ const createScene = () => {
   console.log("create scene")
   const scene = new BABYLON.Scene(engine);
   const camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2,  Math.PI / 4, 15, BABYLON.Vector3.Zero(), scene);
-  camera.setPosition(new BABYLON.Vector3(0, 0, 10));
+  camera.setPosition(new BABYLON.Vector3(0, 10, 0));
   camera.attachControl(canvas, true);
 
   // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
@@ -37,10 +37,22 @@ const createScene = () => {
   // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
   const mercury = BABYLON.Mesh.CreateSphere('mercury', 16, 0.5, scene, false, BABYLON.Mesh.FRONTSIDE);
   mercury.material = mercuryMaterial;
-
-  mercury.parent = sun;
+  const mercuryPivot = new BABYLON.TransformNode("mercuryPivot");
+  mercury.parent = mercuryPivot;
   mercury.position.x = 5;
 
+  const frameRate = 10;
+
+  const mercuryOrbitAnimation = new BABYLON.Animation("mercuryOrbit", "rotation.y", frameRate, 
+    BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+
+  mercuryOrbitAnimation.setKeys([
+    { frame: 0, value: 0},
+    { frame: frameRate, value: Math.PI },
+    { frame: 2 * frameRate, value: 2 * Math.PI },
+  ]);
+
+  scene.beginDirectAnimation(mercuryPivot, [mercuryOrbitAnimation], 0, 2 * frameRate, true);
 
   return scene;
 }
