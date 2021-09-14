@@ -17,7 +17,7 @@ const createScene = () => {
   console.log("create scene")
   const scene = new BABYLON.Scene(engine);
   const camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2,  Math.PI / 4, 15, BABYLON.Vector3.Zero(), scene);
-  //camera.setTarget(BABYLON.Vector3.Zero());
+  camera.setPosition(new BABYLON.Vector3(0, 0, 10));
   camera.attachControl(canvas, true);
 
   // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
