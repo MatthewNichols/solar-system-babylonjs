@@ -12,7 +12,17 @@ let engine = new BABYLON.Engine(canvas, true, {
   disableWebGL2Support: false
 });
 
-const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter: number, distanceFromSun: number) => {
+/**
+ * Setts up the specified planet
+ * @param scene (BABYLON.Scene) The scene where the planets are rendered.
+ * @param planetName (string) The name of the planet. Is used to figure out mesh and id created objects. Make lower case.
+ * @param diameter (number) The diameter in Earth radiai
+ * @param distanceFromSunInAU (number) Distance from from the sun in AU. 
+ * @param orbitalPeriod (number) Orbital period in Earth years
+ */
+const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter: number, distanceFromSunInAU: number, orbitalPeriod: number) => {
+  const auMultiplier = 10;
+
   const planetMaterial = new BABYLON.StandardMaterial(`${planetName}Material`, scene);
   planetMaterial.emissiveTexture = new BABYLON.Texture(`textures/${planetName}.jpg`, scene);
   // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
@@ -21,7 +31,7 @@ const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter: number
 
   const orbitPivot = new BABYLON.TransformNode(`${planetName}Pivot`);
   planet.parent = orbitPivot;
-  planet.position.x = distanceFromSun;
+  planet.position.x = distanceFromSunInAU * auMultiplier;
 
   const orbitAnimation = new BABYLON.Animation(`${planetName}Orbit`, "rotation.y", frameRate, 
     BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
@@ -36,10 +46,10 @@ const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter: number
 };
 
 const createPlanets = (scene: BABYLON.Scene) => {
-  createPlanet(scene, "mercury", 0.38, 4);
-  createPlanet(scene, "venus", 1, 7);
-  createPlanet(scene, "earth", 1, 10);
-  createPlanet(scene, "mars", 0.53, 15);
+  createPlanet(scene, "mercury", 0.38, 0.4, 0.24);
+  createPlanet(scene, "venus", 1, 0.7, 0.615);
+  createPlanet(scene, "earth", 1, 1, 1);
+  createPlanet(scene, "mars", 0.53, 1.5, 1.88);
 }
 
 const createScene = () => {
