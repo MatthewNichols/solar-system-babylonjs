@@ -16,7 +16,7 @@ let engine = new BABYLON.Engine(canvas, true, {
 const createScene = () => {
   console.log("create scene")
   const scene = new BABYLON.Scene(engine);
-  const camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2,  Math.PI / 4, 5, BABYLON.Vector3.Zero(), scene);
+  const camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2,  Math.PI / 4, 15, BABYLON.Vector3.Zero(), scene);
   //camera.setTarget(BABYLON.Vector3.Zero());
   camera.attachControl(canvas, true);
 
@@ -26,12 +26,22 @@ const createScene = () => {
   const sunMaterial = new BABYLON.StandardMaterial("sun", scene);
   sunMaterial.emissiveTexture = new BABYLON.Texture("textures/sun.jpg", scene);
   // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
-  const sphere = BABYLON.Mesh.CreateSphere('sphere1', 16, 2, scene, false, BABYLON.Mesh.FRONTSIDE);
-  sphere.material = sunMaterial;
+  const sun = BABYLON.Mesh.CreateSphere('sun', 16, 2, scene, false, BABYLON.Mesh.FRONTSIDE);
+  sun.material = sunMaterial;
 
   // Move the sphere upward 1/2 of its height
-  sphere.position.y = 1;
+  sun.position.y = 1;
   
+  const mercuryMaterial = new BABYLON.StandardMaterial("mercuryMaterial", scene);
+  mercuryMaterial.emissiveTexture = new BABYLON.Texture("textures/mercury.jpg", scene);
+  // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
+  const mercury = BABYLON.Mesh.CreateSphere('mercury', 16, 0.5, scene, false, BABYLON.Mesh.FRONTSIDE);
+  mercury.material = mercuryMaterial;
+
+  mercury.parent = sun;
+  mercury.position.x = 5;
+
+
   return scene;
 }
 
