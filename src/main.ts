@@ -12,28 +12,32 @@ let engine = new BABYLON.Engine(canvas, true, {
   disableWebGL2Support: false
 });
 
-const createMercury = (scene: BABYLON.Scene) => {
-  const mercuryMaterial = new BABYLON.StandardMaterial("mercuryMaterial", scene);
-  mercuryMaterial.emissiveTexture = new BABYLON.Texture("textures/mercury.jpg", scene);
+const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter: number, distanceFromSun: number) => {
+  const planetMaterial = new BABYLON.StandardMaterial(`${planetName}Material`, scene);
+  planetMaterial.emissiveTexture = new BABYLON.Texture(`textures/${planetName}.jpg`, scene);
   // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
-  const mercury = BABYLON.Mesh.CreateSphere('mercury', 16, 0.5, scene, false, BABYLON.Mesh.FRONTSIDE);
-  mercury.material = mercuryMaterial;
-  const mercuryPivot = new BABYLON.TransformNode("mercuryPivot");
-  mercury.parent = mercuryPivot;
-  mercury.position.x = 5;
+  const planet = BABYLON.Mesh.CreateSphere(planetName, 16, diameter, scene, false, BABYLON.Mesh.FRONTSIDE);
+  planet.material = planetMaterial;
 
-  
+  const orbitPivot = new BABYLON.TransformNode(`${planetName}Pivot`);
+  planet.parent = orbitPivot;
+  planet.position.x = distanceFromSun;
 
-  const mercuryOrbitAnimation = new BABYLON.Animation("mercuryOrbit", "rotation.y", frameRate, 
+  const orbitAnimation = new BABYLON.Animation(`${planetName}Orbit`, "rotation.y", frameRate, 
     BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
 
-  mercuryOrbitAnimation.setKeys([
+  orbitAnimation.setKeys([
     { frame: 0, value: 0},
     { frame: 2 * frameRate, value: Math.PI },
     { frame: 4 * frameRate, value: 2 * Math.PI },
   ]);
 
-  scene.beginDirectAnimation(mercuryPivot, [ mercuryOrbitAnimation ], 0, 4 * frameRate, true);
+  scene.beginDirectAnimation(orbitPivot, [ orbitAnimation ], 0, 4 * frameRate, true);
+};
+
+const createPlanets = (scene: BABYLON.Scene) => {
+  createPlanet(scene, "mercury", 0.5, 5);
+  createPlanet(scene, "venus", 1, 8);
 }
 
 const createScene = () => {
@@ -55,7 +59,7 @@ const createScene = () => {
   // Move the sphere upward 1/2 of its height
   sun.position.y = 1;
   
-  createMercury(scene);
+  createPlanets(scene);
 
   return scene;
 }
