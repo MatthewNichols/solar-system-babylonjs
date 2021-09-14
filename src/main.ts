@@ -36,15 +36,17 @@ const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter: number
 };
 
 const createPlanets = (scene: BABYLON.Scene) => {
-  createPlanet(scene, "mercury", 0.5, 5);
-  createPlanet(scene, "venus", 1, 8);
+  createPlanet(scene, "mercury", 0.38, 4);
+  createPlanet(scene, "venus", 1, 7);
+  createPlanet(scene, "earth", 1, 10);
+  createPlanet(scene, "mars", 0.53, 15);
 }
 
 const createScene = () => {
   console.log("create scene")
   const scene = new BABYLON.Scene(engine);
   const camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2,  Math.PI / 4, 15, BABYLON.Vector3.Zero(), scene);
-  camera.setPosition(new BABYLON.Vector3(0, 10, 0));
+  camera.setPosition(new BABYLON.Vector3(0, 30, 0));
   camera.attachControl(canvas, true);
 
   // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
