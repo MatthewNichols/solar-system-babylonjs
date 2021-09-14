@@ -2,6 +2,8 @@ import * as BABYLON from "babylonjs";
 
 import './style.css'
 
+const frameRate = 10;
+
 const canvas = document.querySelector<HTMLCanvasElement>('#solar-system')!
 
 let engine = new BABYLON.Engine(canvas, true, {
@@ -10,8 +12,29 @@ let engine = new BABYLON.Engine(canvas, true, {
   disableWebGL2Support: false
 });
 
-//let scene = null;
-//let sceneToRender = null;
+const createMercury = (scene: BABYLON.Scene) => {
+  const mercuryMaterial = new BABYLON.StandardMaterial("mercuryMaterial", scene);
+  mercuryMaterial.emissiveTexture = new BABYLON.Texture("textures/mercury.jpg", scene);
+  // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
+  const mercury = BABYLON.Mesh.CreateSphere('mercury', 16, 0.5, scene, false, BABYLON.Mesh.FRONTSIDE);
+  mercury.material = mercuryMaterial;
+  const mercuryPivot = new BABYLON.TransformNode("mercuryPivot");
+  mercury.parent = mercuryPivot;
+  mercury.position.x = 5;
+
+  
+
+  const mercuryOrbitAnimation = new BABYLON.Animation("mercuryOrbit", "rotation.y", frameRate, 
+    BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+
+  mercuryOrbitAnimation.setKeys([
+    { frame: 0, value: 0},
+    { frame: 2 * frameRate, value: Math.PI },
+    { frame: 4 * frameRate, value: 2 * Math.PI },
+  ]);
+
+  scene.beginDirectAnimation(mercuryPivot, [ mercuryOrbitAnimation ], 0, 4 * frameRate, true);
+}
 
 const createScene = () => {
   console.log("create scene")
@@ -32,27 +55,7 @@ const createScene = () => {
   // Move the sphere upward 1/2 of its height
   sun.position.y = 1;
   
-  const mercuryMaterial = new BABYLON.StandardMaterial("mercuryMaterial", scene);
-  mercuryMaterial.emissiveTexture = new BABYLON.Texture("textures/mercury.jpg", scene);
-  // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
-  const mercury = BABYLON.Mesh.CreateSphere('mercury', 16, 0.5, scene, false, BABYLON.Mesh.FRONTSIDE);
-  mercury.material = mercuryMaterial;
-  const mercuryPivot = new BABYLON.TransformNode("mercuryPivot");
-  mercury.parent = mercuryPivot;
-  mercury.position.x = 5;
-
-  const frameRate = 10;
-
-  const mercuryOrbitAnimation = new BABYLON.Animation("mercuryOrbit", "rotation.y", frameRate, 
-    BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-
-  mercuryOrbitAnimation.setKeys([
-    { frame: 0, value: 0},
-    { frame: frameRate, value: Math.PI },
-    { frame: 2 * frameRate, value: 2 * Math.PI },
-  ]);
-
-  scene.beginDirectAnimation(mercuryPivot, [mercuryOrbitAnimation], 0, 2 * frameRate, true);
+  createMercury(scene);
 
   return scene;
 }
