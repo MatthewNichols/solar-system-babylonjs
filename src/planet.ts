@@ -13,14 +13,13 @@ const framesInYear = 100;
  */
 export const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter: number, distanceFromSunInAU: number, orbitalPeriod: number) => {
     const auMultiplier = 10;
+    const localDistance = distanceFromSunInAU * auMultiplier;
 
     const planetMaterial = new BABYLON.StandardMaterial(`${planetName}Material`, scene);
     planetMaterial.emissiveTexture = new BABYLON.Texture(`textures/${planetName}.jpg`, scene);
     // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
     const planet = BABYLON.Mesh.CreateSphere(planetName, 16, diameter, scene, false, BABYLON.Mesh.FRONTSIDE);
     planet.material = planetMaterial;
-
-    const localDistance = distanceFromSunInAU * auMultiplier;
     
     const orbitMaterial = new BABYLON.StandardMaterial(`${planetName}OrbitRingMaterial`, scene);
     orbitMaterial.emissiveColor = BABYLON.Color3.Gray();
