@@ -20,7 +20,7 @@ const createPlanets = (scene: BABYLON.Scene) => {
 const createScene = () => {
   const scene = new BABYLON.Scene(engine);
   const camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2,  Math.PI / 4, 15, BABYLON.Vector3.Zero(), scene);
-  camera.setPosition(new BABYLON.Vector3(0, 30, 0));
+  camera.setPosition(new BABYLON.Vector3(0, 50, 0));
   camera.attachControl(canvas, true);
 
   const sunMaterial = new BABYLON.StandardMaterial("sun", scene);
