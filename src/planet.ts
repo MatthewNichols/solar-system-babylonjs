@@ -20,9 +20,21 @@ export const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter:
     const planet = BABYLON.Mesh.CreateSphere(planetName, 16, diameter, scene, false, BABYLON.Mesh.FRONTSIDE);
     planet.material = planetMaterial;
 
+    const localDistance = distanceFromSunInAU * auMultiplier;
+    
+    const orbitMaterial = new BABYLON.StandardMaterial(`${planetName}OrbitRingMaterial`, scene);
+    orbitMaterial.emissiveColor = BABYLON.Color3.Gray();
+    const orbitRing = BABYLON.MeshBuilder.CreateTorus(`${planetName}OrbitRing`, {
+        diameter: localDistance * 2,
+        thickness: 0.05,
+        tessellation: 64,
+        updatable: true
+    }, scene);
+    orbitRing.material = orbitMaterial;
+
     const orbitPivot = new BABYLON.TransformNode(`${planetName}Pivot`);
     planet.parent = orbitPivot;
-    planet.position.x = distanceFromSunInAU * auMultiplier;
+    planet.position.x = localDistance;
 
     const orbitAnimation = new BABYLON.Animation(`${planetName}Orbit`, "rotation.y", frameRate,
         BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
@@ -36,4 +48,7 @@ export const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter:
     ]);
 
     scene.beginDirectAnimation(orbitPivot, [orbitAnimation], 0, totalFramesInAnimation, true);
+
+    //@ts-ignore
+    window.MyScene = scene;
 };
