@@ -15,12 +15,18 @@ const createPlanets = (scene: BABYLON.Scene) => {
   createPlanet(scene, "venus", 1, 0.7, 0.62);
   createPlanet(scene, "earth", 1, 1, 1);
   createPlanet(scene, "mars", 0.53, 1.5, 1.88);
+  
+  createPlanet(scene, "jupiter", 11, 5.20, 11.86);
+  createPlanet(scene, "saturn", 9, 9.5, 29.46);
+  createPlanet(scene, "uranus", 4, 19.2, 84.02);
+  createPlanet(scene, "neptune", 3.5, 30.1, 164.8);
+
 }
 
 const createScene = () => {
   const scene = new BABYLON.Scene(engine);
   const camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2,  Math.PI / 4, 15, BABYLON.Vector3.Zero(), scene);
-  camera.setPosition(new BABYLON.Vector3(0, 50, 0));
+  camera.setPosition(new BABYLON.Vector3(0, 100, 0));
   camera.attachControl(canvas, true);
 
   const sunMaterial = new BABYLON.StandardMaterial("sun", scene);
