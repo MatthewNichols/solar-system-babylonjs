@@ -20,15 +20,25 @@ const createPlanets = (scene: BABYLON.Scene) => {
   createPlanet(scene, "saturn", 9, 9.5, 29.46);
   createPlanet(scene, "uranus", 4, 19.2, 84.02);
   createPlanet(scene, "neptune", 3.5, 30.1, 164.8);
+}
 
+
+
+const createCamera = (scene: BABYLON.Scene) => {
+  const camera = new BABYLON.UniversalCamera("Camera", new BABYLON.Vector3(0, 100, 0), scene);
+  camera.setTarget(BABYLON.Vector3.Zero());
+  camera.inputs.addMouseWheel();
+  
+  camera.attachControl(canvas, true);
+  
+  return camera;
 }
 
 const createScene = () => {
   const scene = new BABYLON.Scene(engine);
-  const camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2,  Math.PI / 4, 15, BABYLON.Vector3.Zero(), scene);
-  camera.setPosition(new BABYLON.Vector3(0, 100, 0));
-  camera.attachControl(canvas, true);
 
+  createCamera(scene);
+  
   const sunMaterial = new BABYLON.StandardMaterial("sun", scene);
   sunMaterial.emissiveTexture = new BABYLON.Texture("textures/sun.jpg", scene);
   // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
