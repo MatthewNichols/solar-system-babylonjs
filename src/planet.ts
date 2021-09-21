@@ -12,6 +12,8 @@ const framesInYear = 100;
  * @param orbitalPeriod (number) Orbital period in Earth years
  */
 export const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter: number, distanceFromSunInAU: number, orbitalPeriod: number) => {
+    //Eventually I can add in actual historical positions
+    const initialPosition = Math.random() * 2 * Math.PI;
     const auMultiplier = 10;
     const localDistance = distanceFromSunInAU * auMultiplier;
 
@@ -41,9 +43,9 @@ export const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter:
     const totalFramesInAnimation = framesInYear * orbitalPeriod;
 
     orbitAnimation.setKeys([
-        { frame: 0, value: 0 },
-        { frame: (totalFramesInAnimation / 2), value: Math.PI },
-        { frame: totalFramesInAnimation, value: 2 * Math.PI },
+        { frame: 0, value: (0 + initialPosition) },
+        { frame: (totalFramesInAnimation / 2), value: (Math.PI + initialPosition) },
+        { frame: totalFramesInAnimation, value: (2 * Math.PI + initialPosition) },
     ]);
 
     scene.beginDirectAnimation(orbitPivot, [orbitAnimation], 0, totalFramesInAnimation, true);
