@@ -1,5 +1,7 @@
 import * as BABYLON from "babylonjs";
-import { createPlanet } from "./planet";
+import * as GUI from "babylonjs-gui";
+
+import { createSun, createPlanet } from "./planet";
 import './style.css'
 
 const canvas = document.querySelector<HTMLCanvasElement>('#solar-system');
@@ -22,8 +24,6 @@ const createPlanets = (scene: BABYLON.Scene) => {
   createPlanet(scene, "neptune", 3.5, 30.1, 164.8);
 }
 
-
-
 const createCamera = (scene: BABYLON.Scene) => {
   const camera = new BABYLON.UniversalCamera("Camera", new BABYLON.Vector3(0, 100, 0), scene);
   camera.setTarget(BABYLON.Vector3.Zero());
@@ -37,17 +37,27 @@ const createCamera = (scene: BABYLON.Scene) => {
 const createScene = () => {
   const scene = new BABYLON.Scene(engine);
 
-  createCamera(scene);
-  
-  const sunMaterial = new BABYLON.StandardMaterial("sun", scene);
-  sunMaterial.emissiveTexture = new BABYLON.Texture("textures/sun.jpg", scene);
-  // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
-  const sun = BABYLON.Mesh.CreateSphere('sun', 16, 2, scene, false, BABYLON.Mesh.FRONTSIDE);
-  sun.material = sunMaterial;
+  const camera = createCamera(scene);
+  const cameraControl = new BABYLON.TransformNode("cameraControl");
+  camera.parent = cameraControl;
+  cameraControl.position = new BABYLON.Vector3(0, 100, 0);
 
-  // Move the sphere upward 1/2 of its height
-  sun.position.y = 1;
-  
+  const uiLayer = GUI.AdvancedDynamicTexture.CreateFullscreenUI("Controls");
+  const zoomInButton = GUI.Button.CreateSimpleButton("ZoomIn", "+");
+  zoomInButton.height = "60px";
+  zoomInButton.width = "60px";
+  zoomInButton.fontSizeInPixels = 60;
+  zoomInButton.cornerRadius = 1000;
+  zoomInButton.background = "white";
+  zoomInButton.scaleX = 1;
+  zoomInButton.scaleY = 1;
+  uiLayer.addControl(zoomInButton);
+  zoomInButton.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+  zoomInButton.onPointerUpObservable.add(() => {
+    cameraControl.position.y = cameraControl.position.y - 30;
+  })
+
+  createSun(scene);
   createPlanets(scene);
 
   return scene;

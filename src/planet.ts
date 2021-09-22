@@ -11,6 +11,17 @@ const framesInYear = 100;
  * @param distanceFromSunInAU (number) Distance from from the sun in AU. 
  * @param orbitalPeriod (number) Orbital period in Earth years
  */
+export const createSun = (scene: BABYLON.Scene) => {
+    const sunMaterial = new BABYLON.StandardMaterial("sun", scene);
+    sunMaterial.emissiveTexture = new BABYLON.Texture("textures/sun.jpg", scene);
+    // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
+    const sun = BABYLON.Mesh.CreateSphere('sun', 16, 2, scene, false, BABYLON.Mesh.FRONTSIDE);
+    sun.material = sunMaterial;
+  
+    // Move the sphere upward 1/2 of its height
+    sun.position.y = 1;  
+};
+
 export const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter: number, distanceFromSunInAU: number, orbitalPeriod: number) => {
     //Eventually I can add in actual historical positions
     const initialPosition = Math.random() * 2 * Math.PI;
