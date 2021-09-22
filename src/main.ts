@@ -34,6 +34,21 @@ const createCamera = (scene: BABYLON.Scene) => {
   return camera;
 }
 
+const createZoomButton = (uiLayer: GUI.AdvancedDynamicTexture, buttonName: string, buttonText: string, horizontalAlignment: number, verticalAlignment: number, action: () => void) => {
+  const zoomButton = GUI.Button.CreateSimpleButton(buttonName, buttonText);
+  zoomButton.height = "60px";
+  zoomButton.width = "60px";
+  zoomButton.fontSizeInPixels = 60;
+  zoomButton.cornerRadius = 1000;
+  zoomButton.background = "white";
+  
+  uiLayer.addControl(zoomButton);
+  zoomButton.horizontalAlignment = horizontalAlignment; 
+  zoomButton.verticalAlignment = verticalAlignment;
+
+  zoomButton.onPointerUpObservable.add(action);
+}
+
 const createScene = () => {
   const scene = new BABYLON.Scene(engine);
 
@@ -43,20 +58,14 @@ const createScene = () => {
   cameraControl.position = new BABYLON.Vector3(0, 100, 0);
 
   const uiLayer = GUI.AdvancedDynamicTexture.CreateFullscreenUI("Controls");
-  const zoomInButton = GUI.Button.CreateSimpleButton("ZoomIn", "+");
-  zoomInButton.height = "60px";
-  zoomInButton.width = "60px";
-  zoomInButton.fontSizeInPixels = 60;
-  zoomInButton.cornerRadius = 1000;
-  zoomInButton.background = "white";
-  zoomInButton.scaleX = 1;
-  zoomInButton.scaleY = 1;
-  uiLayer.addControl(zoomInButton);
-  zoomInButton.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-  zoomInButton.onPointerUpObservable.add(() => {
+  createZoomButton(uiLayer, "ZoomIn", "+", GUI.Control.HORIZONTAL_ALIGNMENT_LEFT, GUI.Control.VERTICAL_ALIGNMENT_BOTTOM, () => {
     cameraControl.position.y = cameraControl.position.y - 30;
-  })
+  });
 
+  createZoomButton(uiLayer, "ZoomOut", "-", GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT, GUI.Control.VERTICAL_ALIGNMENT_BOTTOM, () => {
+    cameraControl.position.y = cameraControl.position.y + 30;
+  });
+  
   createSun(scene);
   createPlanets(scene);
 
