@@ -13,15 +13,15 @@ let engine = new BABYLON.Engine(canvas, true, {
 });
 
 const createPlanets = (scene: BABYLON.Scene) => {
-  createPlanet(scene, "mercury", 0.38, 0.4, 0.24);
-  createPlanet(scene, "venus", 1, 0.7, 0.62);
+  createPlanet(scene, "mercury", 0.38, 0.4, 0.24, (176 / 365));
+  createPlanet(scene, "venus", 1, 0.7, 0.62, (-117 / 365));
   createPlanet(scene, "earth", 1, 1, 1, (1 / 365));
-  createPlanet(scene, "mars", 0.53, 1.5, 1.88);
+  createPlanet(scene, "mars", 0.53, 1.5, 1.88, (1 / 365));
   
-  createPlanet(scene, "jupiter", 11, 5.20, 11.86);
-  createPlanet(scene, "saturn", 9, 9.5, 29.46);
-  createPlanet(scene, "uranus", 4, 19.2, 84.02);
-  createPlanet(scene, "neptune", 3.5, 30.1, 164.8);
+  createPlanet(scene, "jupiter", 11, 5.20, 11.86, (0.4 / 365));
+  createPlanet(scene, "saturn", 9, 9.5, 29.46, (0.4 / 365));
+  createPlanet(scene, "uranus", 4, 19.2, 84.02, (-0.7 / 365));
+  createPlanet(scene, "neptune", 3.5, 30.1, 164.8, (0.7 / 365));
 }
 
 const createCamera = (scene: BABYLON.Scene) => {

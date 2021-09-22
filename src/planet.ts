@@ -63,15 +63,16 @@ export const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter:
 
     scene.beginDirectAnimation(orbitPivot, [orbitAnimation], 0, totalFramesInOrbitAnimation, true);
 
-    if (rotationPeriod > 0) {
-        const totalFramesInRotationAnimation = framesInYear * rotationPeriod;
+    if (rotationPeriod !== 0) {
+        const totalFramesInRotationAnimation = framesInYear * Math.abs(rotationPeriod);
         const rotationAnimation = new BABYLON.Animation(`${planetName}Rotation`, "rotation.y", frameRate,
             BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
         
+        const directionMultiplier = rotationPeriod > 0 ? 1 : -1;
         rotationAnimation.setKeys([
-            { frame: 0, value: (0 + initialPosition) },
-            { frame: (totalFramesInRotationAnimation / 2), value: (Math.PI + initialPosition) },
-            { frame: totalFramesInRotationAnimation, value: (2 * Math.PI + initialPosition) },
+            { frame: 0, value: 0 },
+            { frame: (totalFramesInRotationAnimation / 2), value: (Math.PI * directionMultiplier) },
+            { frame: totalFramesInRotationAnimation, value: (2 * Math.PI *  directionMultiplier) },
         ]);
 
         scene.beginDirectAnimation(planet, [rotationAnimation], 0, totalFramesInRotationAnimation, true);   
