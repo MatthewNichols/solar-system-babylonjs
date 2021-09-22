@@ -15,7 +15,7 @@ let engine = new BABYLON.Engine(canvas, true, {
 const createPlanets = (scene: BABYLON.Scene) => {
   createPlanet(scene, "mercury", 0.38, 0.4, 0.24);
   createPlanet(scene, "venus", 1, 0.7, 0.62);
-  createPlanet(scene, "earth", 1, 1, 1);
+  createPlanet(scene, "earth", 1, 1, 1, (1 / 365));
   createPlanet(scene, "mars", 0.53, 1.5, 1.88);
   
   createPlanet(scene, "jupiter", 11, 5.20, 11.86);
@@ -69,6 +69,10 @@ const createScene = () => {
   createSun(scene);
   createPlanets(scene);
 
+  // Just for Debug.
+  //@ts-ignore
+  window.MyScene = scene;
+  
   return scene;
 }
 
