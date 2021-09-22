@@ -2,6 +2,7 @@ import * as BABYLON from "babylonjs";
 import * as GUI from "babylonjs-gui";
 
 import { createSun, createPlanet } from "./planet";
+import { setupUI, createZoomButton } from "./ui";
 import './style.css'
 
 const canvas = document.querySelector<HTMLCanvasElement>('#solar-system');
@@ -34,21 +35,6 @@ const createCamera = (scene: BABYLON.Scene) => {
   return camera;
 }
 
-const createZoomButton = (uiLayer: GUI.AdvancedDynamicTexture, buttonName: string, buttonText: string, horizontalAlignment: number, verticalAlignment: number, action: () => void) => {
-  const zoomButton = GUI.Button.CreateSimpleButton(buttonName, buttonText);
-  zoomButton.height = "60px";
-  zoomButton.width = "60px";
-  zoomButton.fontSizeInPixels = 60;
-  zoomButton.cornerRadius = 1000;
-  zoomButton.background = "white";
-  
-  uiLayer.addControl(zoomButton);
-  zoomButton.horizontalAlignment = horizontalAlignment; 
-  zoomButton.verticalAlignment = verticalAlignment;
-
-  zoomButton.onPointerUpObservable.add(action);
-}
-
 const createScene = () => {
   const scene = new BABYLON.Scene(engine);
 
@@ -57,14 +43,7 @@ const createScene = () => {
   camera.parent = cameraControl;
   cameraControl.position = new BABYLON.Vector3(0, 100, 0);
 
-  const uiLayer = GUI.AdvancedDynamicTexture.CreateFullscreenUI("Controls");
-  createZoomButton(uiLayer, "ZoomIn", "+", GUI.Control.HORIZONTAL_ALIGNMENT_LEFT, GUI.Control.VERTICAL_ALIGNMENT_BOTTOM, () => {
-    cameraControl.position.y = cameraControl.position.y - 30;
-  });
-
-  createZoomButton(uiLayer, "ZoomOut", "-", GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT, GUI.Control.VERTICAL_ALIGNMENT_BOTTOM, () => {
-    cameraControl.position.y = cameraControl.position.y + 30;
-  });
+  setupUI(cameraControl);
   
   createSun(scene);
   createPlanets(scene);
