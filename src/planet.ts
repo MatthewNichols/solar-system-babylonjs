@@ -14,6 +14,9 @@ export const createSun = (scene: BABYLON.Scene) => {
     sun.position.y = 1;  
 };
 
+interface PlanetInstance {
+    mesh: BABYLON.Mesh;
+}
 
 /**
  * Sets up the specified planet
@@ -24,7 +27,7 @@ export const createSun = (scene: BABYLON.Scene) => {
  * @param orbitalPeriod (number) Orbital period in Earth years
  * @param rotationPeriod (number) Rotation period (length of day) in Earth years
  */
-export const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter: number, distanceFromSunInAU: number, orbitalPeriod: number, rotationPeriod: number = 0) => {
+export const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter: number, distanceFromSunInAU: number, orbitalPeriod: number, rotationPeriod: number = 0): PlanetInstance => {
     //Eventually I can add in actual historical positions
     const initialPosition = Math.random() * 2 * Math.PI;
     const auMultiplier = 10;
@@ -77,4 +80,10 @@ export const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter:
 
         scene.beginDirectAnimation(planet, [rotationAnimation], 0, totalFramesInRotationAnimation, true);   
     }
+
+    return { mesh: planet };
 };
+
+export const addSatellite = (scene: BABYLON.Scene, parentPlanet: PlanetInstance, satelliteName: string, diameter: number, distanceFromPlanetInAU: number, orbitalPeriod: number, rotationPeriod: number = orbitalPeriod) => {
+
+}
