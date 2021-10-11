@@ -73,9 +73,9 @@ export const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter:
  * @param satelliteName 
  * @param diameter (number) The diameter in Earth diameters  
  * @param distanceFromPlanetInAU 
- * @param orbitalPeriod 
- * @param rotationPeriod 
- */
+ * @param orbitalPeriod (number) Orbital period in Earth years
+ * @param rotationPeriod (number) Rotation period (length of day) in Earth years
+*/
 export const createSatellite = (scene: BABYLON.Scene, parentPlanet: PlanetInstance, satelliteName: string, diameter: number, distanceFromPlanetInAU: number, 
                                 orbitalPeriod: number, rotationPeriod: number = orbitalPeriod) => {
     //Eventually I can add in actual historical positions
@@ -86,12 +86,16 @@ export const createSatellite = (scene: BABYLON.Scene, parentPlanet: PlanetInstan
     satelliteMaterial.emissiveTexture = new BABYLON.Texture(`textures/mercury.jpg`, scene);
     // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
     const satellite = BABYLON.Mesh.CreateSphere(satelliteName, 16, diameter, scene, false, BABYLON.Mesh.FRONTSIDE);
-    satellite.material = satelliteMaterial;   
-    satellite.parent = parentPlanet.orbitFrame;
+    satellite.material = satelliteMaterial;
+
+    // Create a pivot point in the scene origin for the planet to parent to so we can just rotate the planet through its orbit.
+    const orbitPivot = new BABYLON.TransformNode(`${satelliteName}Pivot`);
+    orbitPivot.parent = parentPlanet.orbitFrame;
+    satellite.parent = orbitPivot;
     satellite.position.x = localDistance;
 
-    createOrbitAnimation(scene, parentPlanet.orbitFrame, "luna", initialPosition, orbitalPeriod);
-    createRotationAnimation(scene, satellite, rotationPeriod, "luna");
+    createOrbitAnimation(scene, orbitPivot, satelliteName, initialPosition, orbitalPeriod);
+    // createRotationAnimation(scene, satellite, rotationPeriod, satelliteName);
 }
 
 function createRotationAnimation(scene: BABYLON.Scene, planet: BABYLON.Mesh, rotationPeriod: number, planetName: string) {
