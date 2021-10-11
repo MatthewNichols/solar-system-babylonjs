@@ -1,8 +1,7 @@
 import * as BABYLON from "babylonjs";
-import * as GUI from "babylonjs-gui";
 
-import { createSun, createPlanet } from "./planet";
-import { setupUI, createZoomButton } from "./ui";
+import { createSun, createPlanet, createSatellite } from "./planet";
+import { setupUI } from "./ui";
 import './style.css'
 
 const canvas = document.querySelector<HTMLCanvasElement>('#solar-system');
@@ -16,7 +15,8 @@ let engine = new BABYLON.Engine(canvas, true, {
 const createPlanets = (scene: BABYLON.Scene) => {
   createPlanet(scene, "mercury", 0.38, 0.4, 0.24, (176 / 365));
   createPlanet(scene, "venus", 1, 0.7, 0.62, (-117 / 365));
-  createPlanet(scene, "earth", 1, 1, 1, (1 / 365));
+  const earth = createPlanet(scene, "earth", 1, 1, 1, (1 / 365));
+  createSatellite(scene, earth, "luna", 0.27, 0.1, (1/13), (1/13));
   createPlanet(scene, "mars", 0.53, 1.5, 1.88, (1 / 365));
   
   createPlanet(scene, "jupiter", 11, 5.20, 11.86, (0.4 / 365));
