@@ -76,8 +76,8 @@ export const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter:
  * @param orbitalPeriod (number) Orbital period in Earth years
  * @param rotationPeriod (number) Rotation period (length of day) in Earth years
 */
-export const createSatellite = (scene: BABYLON.Scene, parentPlanet: PlanetInstance, satelliteName: string, diameter: number, distanceFromPlanetInAU: number, 
-                                orbitalPeriod: number, rotationPeriod: number = orbitalPeriod) => {
+export const createSatellite = (scene: BABYLON.Scene, parentPlanet: PlanetInstance, satelliteName: string, 
+                                diameter: number, distanceFromPlanetInAU: number, orbitalPeriod: number) => {
     //Eventually I can add in actual historical positions
     const initialPosition = Math.random() * 2 * Math.PI;
     const localDistance = distanceFromPlanetInAU * auMultiplier;
@@ -95,7 +95,6 @@ export const createSatellite = (scene: BABYLON.Scene, parentPlanet: PlanetInstan
     satellite.position.x = localDistance;
 
     createOrbitAnimation(scene, orbitPivot, satelliteName, initialPosition, orbitalPeriod);
-    // createRotationAnimation(scene, satellite, rotationPeriod, satelliteName);
 }
 
 function createRotationAnimation(scene: BABYLON.Scene, planet: BABYLON.Mesh, rotationPeriod: number, planetName: string) {

@@ -17,15 +17,15 @@ const createPlanets = (scene: BABYLON.Scene) => {
   createPlanet(scene, "venus", 1, 0.7, 0.62, (-117 / 365));
   
   const earth = createPlanet(scene, "earth", 1, 1, 1, (1 / 365));
-  createSatellite(scene, earth, "luna", 0.27, 0.1, (1/13), (1/13));
+  createSatellite(scene, earth, "luna", 0.27, 0.1, (1/13));
   
   createPlanet(scene, "mars", 0.53, 1.5, 1.88, (1 / 365));
   
   const jupiter = createPlanet(scene, "jupiter", 11, 5.20, 11.86, (0.4 / 365));
-  createSatellite(scene, jupiter, "io", 0.29, 0.75, (1.8/365), 1)
-  createSatellite(scene, jupiter, "europa", 0.26, 1.2, (3.6/365), 1)
-  createSatellite(scene, jupiter, "ganymede", 0.45, 1.6, (7.2/365), 1)
-  createSatellite(scene, jupiter, "callisto", 0.41, 2, (16.6/365), 1)
+  createSatellite(scene, jupiter, "io", 0.29, 0.75, (1.8/365))
+  createSatellite(scene, jupiter, "europa", 0.26, 1.2, (3.6/365))
+  createSatellite(scene, jupiter, "ganymede", 0.45, 1.6, (7.2/365))
+  createSatellite(scene, jupiter, "callisto", 0.41, 2, (16.6/365))
 
   createPlanet(scene, "saturn", 9, 9.5, 29.46, (0.4 / 365));
   createPlanet(scene, "uranus", 4, 19.2, 84.02, (-0.7 / 365));
