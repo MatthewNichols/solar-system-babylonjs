@@ -1,9 +1,10 @@
-import { Engine, Scene, TransformNode, UniversalCamera, Vector3 } from "babylonjs";
+import { Engine, Scene } from "babylonjs";
 
 import { createSun, createPlanet, createSatellite } from "./planet";
 import { setupUI } from "./ui";
-import './style.css'
 import { UniCam } from "./uni-cam";
+
+import './style.css'
 
 const canvas = document.querySelector<HTMLCanvasElement>('#solar-system');
 

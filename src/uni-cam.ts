@@ -2,6 +2,9 @@ import { Scene, TransformNode, UniversalCamera, Vector3 } from "babylonjs";
 
 const zoomMultiplier = 0.5;
 
+/**
+ * Wraps UniversalCamera creation and control
+ */
 export class UniCam {
   private camera: UniversalCamera;
   private cameraControl = new TransformNode("cameraControl");
@@ -15,7 +18,6 @@ export class UniCam {
 
     this.camera.parent = this.cameraControl;
     this.cameraControl.position = new Vector3(0, 100, 0);
-
   }
 
   setZoom(value: number) {
