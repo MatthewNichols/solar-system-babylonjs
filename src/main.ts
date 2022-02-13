@@ -1,4 +1,4 @@
-import * as BABYLON from "babylonjs";
+import { Engine, Scene, TransformNode, UniversalCamera, Vector3 } from "babylonjs";
 
 import { createSun, createPlanet, createSatellite } from "./planet";
 import { setupUI } from "./ui";
@@ -6,13 +6,13 @@ import './style.css'
 
 const canvas = document.querySelector<HTMLCanvasElement>('#solar-system');
 
-let engine = new BABYLON.Engine(canvas, true, {
+let engine = new Engine(canvas, true, {
   preserveDrawingBuffer: true,
   stencil: true,
   disableWebGL2Support: false
 });
 
-const createPlanets = (scene: BABYLON.Scene) => {
+const createPlanets = (scene: Scene) => {
   createPlanet(scene, "mercury", 0.38, 0.4, 0.24, (176 / 365));
   createPlanet(scene, "venus", 1, 0.7, 0.62, (-117 / 365));
   
@@ -32,9 +32,9 @@ const createPlanets = (scene: BABYLON.Scene) => {
   createPlanet(scene, "neptune", 3.5, 30.1, 164.8, (0.7 / 365));
 }
 
-const createCamera = (scene: BABYLON.Scene) => {
-  const camera = new BABYLON.UniversalCamera("Camera", new BABYLON.Vector3(0, 100, 0), scene);
-  camera.setTarget(BABYLON.Vector3.Zero());
+const createCamera = (scene: Scene) => {
+  const camera = new UniversalCamera("Camera", new Vector3(0, 100, 0), scene);
+  camera.setTarget(Vector3.Zero());
   camera.inputs.addMouseWheel();
   
   camera.attachControl(canvas, true);
@@ -43,12 +43,12 @@ const createCamera = (scene: BABYLON.Scene) => {
 }
 
 const createScene = () => {
-  const scene = new BABYLON.Scene(engine);
+  const scene = new Scene(engine);
 
   const camera = createCamera(scene);
-  const cameraControl = new BABYLON.TransformNode("cameraControl");
+  const cameraControl = new TransformNode("cameraControl");
   camera.parent = cameraControl;
-  cameraControl.position = new BABYLON.Vector3(0, 100, 0);
+  cameraControl.position = new Vector3(0, 100, 0);
 
   setupUI(cameraControl);
   

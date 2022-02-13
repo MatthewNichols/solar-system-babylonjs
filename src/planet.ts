@@ -1,14 +1,14 @@
-import * as BABYLON from "babylonjs";
+import { Animation as B_Animation, Color3, Mesh, MeshBuilder, Node as B_Node, Scene, StandardMaterial, Texture, TransformNode } from "babylonjs";
 
 const frameRate = 10;
 const framesInYear = 365;
 const auMultiplier = 10;
 
-export const createSun = (scene: BABYLON.Scene) => {
-    const sunMaterial = new BABYLON.StandardMaterial("sun", scene);
-    sunMaterial.emissiveTexture = new BABYLON.Texture("textures/sun.jpg", scene);
+export const createSun = (scene: Scene) => {
+    const sunMaterial = new StandardMaterial("sun", scene);
+    sunMaterial.emissiveTexture = new Texture("textures/sun.jpg", scene);
     // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
-    const sun = BABYLON.Mesh.CreateSphere('sun', 16, 2, scene, false, BABYLON.Mesh.FRONTSIDE);
+    const sun = Mesh.CreateSphere('sun', 16, 2, scene, false, Mesh.FRONTSIDE);
     sun.material = sunMaterial;
   
     // Move the sphere upward 1/2 of its height
@@ -16,8 +16,8 @@ export const createSun = (scene: BABYLON.Scene) => {
 };
 
 interface PlanetInstance {
-    mesh: BABYLON.Mesh;
-    orbitFrame: BABYLON.Node;
+    mesh: Mesh;
+    orbitFrame: B_Node;
 }
 
 /**
@@ -29,21 +29,21 @@ interface PlanetInstance {
  * @param orbitalPeriod (number) Orbital period in Earth years
  * @param rotationPeriod (number) Rotation period (length of day) in Earth years
  */
-export const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter: number, distanceFromSunInAU: number, 
+export const createPlanet = (scene: Scene, planetName: string, diameter: number, distanceFromSunInAU: number, 
                                 orbitalPeriod: number, rotationPeriod: number = 0): PlanetInstance => {
     //Eventually I can add in actual historical positions
     const initialPosition = Math.random() * 2 * Math.PI;
     const localDistance = distanceFromSunInAU * auMultiplier;
 
-    const planetMaterial = new BABYLON.StandardMaterial(`${planetName}Material`, scene);
-    planetMaterial.emissiveTexture = new BABYLON.Texture(`textures/${planetName}.jpg`, scene);
+    const planetMaterial = new StandardMaterial(`${planetName}Material`, scene);
+    planetMaterial.emissiveTexture = new Texture(`textures/${planetName}.jpg`, scene);
     // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
-    const planet = BABYLON.Mesh.CreateSphere(planetName, 16, diameter, scene, false, BABYLON.Mesh.FRONTSIDE);
+    const planet = Mesh.CreateSphere(planetName, 16, diameter, scene, false, Mesh.FRONTSIDE);
     planet.material = planetMaterial;
     
-    const orbitMaterial = new BABYLON.StandardMaterial(`${planetName}OrbitRingMaterial`, scene);
-    orbitMaterial.emissiveColor = BABYLON.Color3.Gray();
-    const orbitRing = BABYLON.MeshBuilder.CreateTorus(`${planetName}OrbitRing`, {
+    const orbitMaterial = new StandardMaterial(`${planetName}OrbitRingMaterial`, scene);
+    orbitMaterial.emissiveColor = Color3.Gray();
+    const orbitRing = MeshBuilder.CreateTorus(`${planetName}OrbitRing`, {
         diameter: localDistance * 2,
         thickness: 0.05,
         tessellation: 64,
@@ -51,10 +51,10 @@ export const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter:
     }, scene);
     orbitRing.material = orbitMaterial;
 
-    const planetFrame = new BABYLON.TransformNode(`${planetName}ReferenceFrame`);
+    const planetFrame = new TransformNode(`${planetName}ReferenceFrame`);
 
     // Create a pivot point in the scene origin for the planet to parent to so we can just rotate the planet through its orbit.
-    const orbitPivot = new BABYLON.TransformNode(`${planetName}Pivot`);
+    const orbitPivot = new TransformNode(`${planetName}Pivot`);
     planetFrame.parent = orbitPivot;
     planet.parent = planetFrame;
     planetFrame.position.x = localDistance;
@@ -76,20 +76,20 @@ export const createPlanet = (scene: BABYLON.Scene, planetName: string, diameter:
  * @param orbitalPeriod (number) Orbital period in Earth years
  * @param rotationPeriod (number) Rotation period (length of day) in Earth years
 */
-export const createSatellite = (scene: BABYLON.Scene, parentPlanet: PlanetInstance, satelliteName: string, 
+export const createSatellite = (scene: Scene, parentPlanet: PlanetInstance, satelliteName: string, 
                                 diameter: number, distanceFromPlanetInAU: number, orbitalPeriod: number) => {
     //Eventually I can add in actual historical positions
     const initialPosition = Math.random() * 2 * Math.PI;
     const localDistance = distanceFromPlanetInAU * auMultiplier;
 
-    const satelliteMaterial = new BABYLON.StandardMaterial(`${satelliteName}Material`, scene);
-    satelliteMaterial.emissiveTexture = new BABYLON.Texture(`textures/mercury.jpg`, scene);
+    const satelliteMaterial = new StandardMaterial(`${satelliteName}Material`, scene);
+    satelliteMaterial.emissiveTexture = new Texture(`textures/mercury.jpg`, scene);
     // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
-    const satellite = BABYLON.Mesh.CreateSphere(satelliteName, 16, diameter, scene, false, BABYLON.Mesh.FRONTSIDE);
+    const satellite = Mesh.CreateSphere(satelliteName, 16, diameter, scene, false, Mesh.FRONTSIDE);
     satellite.material = satelliteMaterial;
 
     // Create a pivot point in the scene origin for the planet to parent to so we can just rotate the planet through its orbit.
-    const orbitPivot = new BABYLON.TransformNode(`${satelliteName}Pivot`);
+    const orbitPivot = new TransformNode(`${satelliteName}Pivot`);
     orbitPivot.parent = parentPlanet.orbitFrame;
     satellite.parent = orbitPivot;
     satellite.position.x = localDistance;
@@ -97,11 +97,11 @@ export const createSatellite = (scene: BABYLON.Scene, parentPlanet: PlanetInstan
     createOrbitAnimation(scene, orbitPivot, satelliteName, initialPosition, orbitalPeriod);
 }
 
-function createRotationAnimation(scene: BABYLON.Scene, planet: BABYLON.Mesh, rotationPeriod: number, planetName: string) {
+function createRotationAnimation(scene: Scene, planet: Mesh, rotationPeriod: number, planetName: string) {
     if (rotationPeriod !== 0) {
         const totalFramesInRotationAnimation = framesInYear * Math.abs(rotationPeriod);
-        const rotationAnimation = new BABYLON.Animation(`${planetName}Rotation`, "rotation.y", frameRate,
-            BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+        const rotationAnimation = new B_Animation(`${planetName}Rotation`, "rotation.y", frameRate,
+            B_Animation.ANIMATIONTYPE_FLOAT, B_Animation.ANIMATIONLOOPMODE_CYCLE);
 
         const directionMultiplier = rotationPeriod > 0 ? 1 : -1;
         rotationAnimation.setKeys([
@@ -114,10 +114,10 @@ function createRotationAnimation(scene: BABYLON.Scene, planet: BABYLON.Mesh, rot
     }
 }
 
-function createOrbitAnimation(scene: BABYLON.Scene, orbitPivot: BABYLON.Node, bodyName: string, initialPosition: number, orbitalPeriod: number) {
+function createOrbitAnimation(scene: Scene, orbitPivot: B_Node, bodyName: string, initialPosition: number, orbitalPeriod: number) {
     const totalFramesInOrbitAnimation = framesInYear * orbitalPeriod;
-    const orbitAnimation = new BABYLON.Animation(`${bodyName}Orbit`, "rotation.y", frameRate,
-        BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+    const orbitAnimation = new B_Animation(`${bodyName}Orbit`, "rotation.y", frameRate,
+        B_Animation.ANIMATIONTYPE_FLOAT, B_Animation.ANIMATIONLOOPMODE_CYCLE);
 
     orbitAnimation.setKeys([
         { frame: 0, value: (0 + initialPosition) },
