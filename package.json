@@ -11,7 +11,7 @@
     "vite": "2.7.13"
   },
   "dependencies": {
-    "babylonjs": "^5.0.0-alpha.45",
-    "babylonjs-gui": "^5.0.0-alpha.45"
+    "babylonjs": "^5.0.0-beta.6",
+    "babylonjs-gui": "^5.0.0-beta.6"
   }
 }
