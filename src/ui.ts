@@ -1,7 +1,5 @@
-import { TransformNode } from "babylonjs";
 import * as GUI from "babylonjs-gui";
-
-const zoomMultiplier = 0.5;
+import { UniCam } from "./uni-cam";
 
 export const createZoomButton = (uiLayer: GUI.AdvancedDynamicTexture, buttonName: string, buttonText: string, horizontalAlignment: number, verticalAlignment: number, action: () => void) => {
     const zoomButton = GUI.Button.CreateSimpleButton(buttonName, buttonText);
@@ -18,24 +16,14 @@ export const createZoomButton = (uiLayer: GUI.AdvancedDynamicTexture, buttonName
     zoomButton.onPointerUpObservable.add(action);
   }
   
-  export const setupUI = async (cameraControl: TransformNode) => {
+  export const setupUI = async (uniCam: UniCam) => {
     const uiLayer = GUI.AdvancedDynamicTexture.CreateFullscreenUI("Controls");
     await uiLayer.parseFromURLAsync("guiTexture.json");
 
     const zoomSlider = uiLayer.getControlByName("ZoomSlider") as GUI.Slider;
 
-    console.log(cameraControl.position.y);
     zoomSlider.onValueChangedObservable.add((value: number) => {
       console.log(value)
-      cameraControl.position.y = value * zoomMultiplier;
-    })
-
-    // createZoomButton(uiLayer, "ZoomIn", "+", GUI.Control.HORIZONTAL_ALIGNMENT_LEFT, GUI.Control.VERTICAL_ALIGNMENT_BOTTOM, () => {
-    //   cameraControl.position.y = cameraControl.position.y - 30;
-    // });
-  
-    // createZoomButton(uiLayer, "ZoomOut", "-", GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT, GUI.Control.VERTICAL_ALIGNMENT_BOTTOM, () => {
-    //   cameraControl.position.y = cameraControl.position.y + 30;
-    // });
-  
+      uniCam.setZoom(value);
+    });
   }

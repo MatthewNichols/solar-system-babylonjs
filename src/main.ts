@@ -3,6 +3,7 @@ import { Engine, Scene, TransformNode, UniversalCamera, Vector3 } from "babylonj
 import { createSun, createPlanet, createSatellite } from "./planet";
 import { setupUI } from "./ui";
 import './style.css'
+import { UniCam } from "./uni-cam";
 
 const canvas = document.querySelector<HTMLCanvasElement>('#solar-system');
 
@@ -32,25 +33,11 @@ const createPlanets = (scene: Scene) => {
   createPlanet(scene, "neptune", 3.5, 30.1, 164.8, (0.7 / 365));
 }
 
-const createCamera = (scene: Scene) => {
-  const camera = new UniversalCamera("Camera", new Vector3(0, 100, 0), scene);
-  camera.setTarget(Vector3.Zero());
-  camera.inputs.addMouseWheel();
-  
-  camera.attachControl(canvas, true);
-  
-  return camera;
-}
-
 const createScene = () => {
   const scene = new Scene(engine);
 
-  const camera = createCamera(scene);
-  const cameraControl = new TransformNode("cameraControl");
-  camera.parent = cameraControl;
-  cameraControl.position = new Vector3(0, 100, 0);
-
-  setupUI(cameraControl);
+  const uniCam =  new UniCam(scene, canvas!) 
+  setupUI(uniCam);
   
   createSun(scene);
   createPlanets(scene);
