@@ -1,5 +1,6 @@
 import * as GUI from "babylonjs-gui";
-import { UniCam } from "./uni-cam";
+import { FollowCam } from "./follow-cam";
+//import { UniCam } from "./uni-cam";
 
 export const createZoomButton = (uiLayer: GUI.AdvancedDynamicTexture, buttonName: string, buttonText: string, horizontalAlignment: number, verticalAlignment: number, action: () => void) => {
     const zoomButton = GUI.Button.CreateSimpleButton(buttonName, buttonText);
@@ -16,7 +17,7 @@ export const createZoomButton = (uiLayer: GUI.AdvancedDynamicTexture, buttonName
     zoomButton.onPointerUpObservable.add(action);
   }
   
-  export const setupUI = async (uniCam: UniCam) => {
+  export const setupUI = async (cam: FollowCam) => {
     const uiLayer = GUI.AdvancedDynamicTexture.CreateFullscreenUI("Controls");
     await uiLayer.parseFromURLAsync("guiTexture.json");
 
@@ -24,6 +25,6 @@ export const createZoomButton = (uiLayer: GUI.AdvancedDynamicTexture, buttonName
 
     zoomSlider.onValueChangedObservable.add((value: number) => {
       console.log(value)
-      uniCam.setZoom(value);
+      cam.setZoom(value);
     });
   }

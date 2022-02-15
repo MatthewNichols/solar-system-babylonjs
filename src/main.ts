@@ -2,7 +2,8 @@ import { Engine, Scene } from "babylonjs";
 
 import { createSun, createPlanet, createSatellite } from "./planet";
 import { setupUI } from "./ui";
-import { UniCam } from "./uni-cam";
+// import { UniCam } from "./uni-cam";
+import { FollowCam } from "./follow-cam";
 
 import './style.css'
 
@@ -37,11 +38,14 @@ const createPlanets = (scene: Scene) => {
 const createScene = () => {
   const scene = new Scene(engine);
 
-  const uniCam =  new UniCam(scene, canvas!) 
-  setupUI(uniCam);
+  // const uniCam =  new UniCam(scene, canvas!) 
+  const cam =  new FollowCam(scene, canvas!) 
+  setupUI(cam);
   
-  createSun(scene);
+  const sun = createSun(scene);
   createPlanets(scene);
+
+  cam.setTarget(sun);
 
   // Just for Debug.
   //@ts-ignore

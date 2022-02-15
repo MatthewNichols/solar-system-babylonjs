@@ -4,7 +4,7 @@ const frameRate = 10;
 const framesInYear = 365;
 const auMultiplier = 10;
 
-export const createSun = (scene: Scene) => {
+export const createSun = (scene: Scene): Mesh => {
     const sunMaterial = new StandardMaterial("sun", scene);
     sunMaterial.emissiveTexture = new Texture("textures/sun.jpg", scene);
     // Create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation
@@ -12,7 +12,9 @@ export const createSun = (scene: Scene) => {
     sun.material = sunMaterial;
   
     // Move the sphere upward 1/2 of its height
-    sun.position.y = 1;  
+    //sun.position.y = 1;  
+
+    return sun;
 };
 
 interface PlanetInstance {
